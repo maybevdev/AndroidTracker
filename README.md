@@ -11,8 +11,8 @@ NestJS + PostgreSQL + Redis, Docker Compose-szal csomagolva. Ez a README végigv
 # git clone <repo-url>
 # cd <repo>
 
-# 2) .env létrehozása (példa lentebb)
-cp .env.example .env  # vagy hozd létre kézzel
+# 2) ..env létrehozása (példa lentebb)
+cp ..env.example ..env  # vagy hozd létre kézzel
 
 # 3) Futtatás
 docker compose up -d --build
@@ -83,7 +83,7 @@ services:
     # Apple Silicon / ARM esetén hasznos lehet:
     # platform: linux/arm64
     env_file:
-      - ./.env
+      - ./..env
     environment:
       # Kényelmes egyben átadni az adatbázis URL-t (SSL off dev-ben)
       DATABASE_URL: postgres://${PG_USERNAME}:${PG_PASSWORD}@${PG_HOST}:${PG_PORT}/${PG_DATABASE}?sslmode=disable
@@ -102,7 +102,7 @@ services:
     image: postgres:17
     restart: always
     env_file:
-      - ./.env
+      - ./..env
     environment:
       POSTGRES_USER: ${PG_USERNAME}
       POSTGRES_PASSWORD: ${PG_PASSWORD}
@@ -225,8 +225,8 @@ pgdata/
 # Compose config (feloldott változókkal):
 docker compose config
 
-# Konténerben elérhető env-ek ellenőrzése:
-docker exec -it $(docker compose ps -q backend) sh -lc 'env | sort | egrep "PG_|REDIS|DATABASE_URL|PORT"'
+# Konténerben elérhető .env-ek ellenőrzése:
+docker exec -it $(docker compose ps -q backend) sh -lc '.env | sort | egrep "PG_|REDIS|DATABASE_URL|PORT"'
 
 # Hálózati elérés backendből:
 docker exec -it $(docker compose ps -q backend) sh -lc 'apk add --no-cache busybox-extras >/dev/null 2>&1 || true; nc -zv db 5432; nc -zv redis 6379'

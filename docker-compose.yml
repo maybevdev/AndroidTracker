@@ -3,9 +3,8 @@ services:
   backend:
     build:
       context: .
-      # Ha ARM hoston vagy (Apple Silicon), ez segít:
-      platforms:
-        - linux/arm64
+    env_file:
+      - .env
     ports:
       - '8080:8080'
     depends_on:
@@ -14,9 +13,6 @@ services:
       redis:
         condition: service_healthy
     environment:
-      # DATABASE_URL: postgres://user:password@db:5432/dbname
-      # REDIS_URL: redis://redis:6379 # <-- Ezt fogja olvasni a backend
-      # Alternatív bontva:
       REDIS_HOST: redis
       REDIS_PORT: 6379
 
@@ -38,13 +34,10 @@ services:
       retries: 10
 
   redis:
-    # Ha csak sima Redis kell:
     image: redis:7-alpine
-    # Ha a logban látott modulok kellenek (Bloom/Search/JSON/TS), akkor:
-    # image: redis/redis-stack:latest
     restart: always
     ports:
-      - '6379:6379' # csak akkor kell, ha hostról is akarsz csatlakozni
+      - '6379:6379'
     healthcheck:
       test: ['CMD', 'redis-cli', 'ping']
       interval: 5s
