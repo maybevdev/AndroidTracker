@@ -1,57 +1,39 @@
 package com.example.progr3ssapp.ui.theme
 
-import android.app.Activity
-import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
-
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+private val Progr3ssColorScheme = darkColorScheme(
+    primary = Pink,
+    onPrimary = Night,
+    primaryContainer = Blush,
+    onPrimaryContainer = Night,
+    secondary = SkyBlue,
+    onSecondary = Night,
+    secondaryContainer = BabyBlue,
+    onSecondaryContainer = Night,
+    tertiary = Lavender,
+    onTertiary = Night,
+    tertiaryContainer = Lilac,
+    onTertiaryContainer = Night,
+    background = Night,
+    onBackground = TextLight,
+    surface = Night,
+    onSurface = TextLight,
+    surfaceVariant = NightSurfaceHigh,
+    onSurfaceVariant = TextMuted,
+    surfaceContainerLow = NightSurface,
+    surfaceContainer = NightSurface,
+    surfaceContainerHigh = NightSurfaceHigh,
+    surfaceContainerHighest = NightSurfaceHighest,
+    outline = Outline,
 )
 
 @Composable
-fun Progr3ssAppTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
-) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
-
+fun Progr3ssAppTheme(content: @Composable () -> Unit) {
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = Progr3ssColorScheme,
         typography = Typography,
         content = content
     )

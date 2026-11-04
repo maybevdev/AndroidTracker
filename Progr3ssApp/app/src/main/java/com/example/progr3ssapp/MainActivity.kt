@@ -20,7 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.progr3ssapp.ui.theme.Progr3ssAppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
+import androidx.activity.SystemBarStyle
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // 1. Install the splash screen BEFORE super.onCreate()
@@ -46,7 +46,10 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        enableEdgeToEdge()
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
+            navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
+        )
         setContent {
             Progr3ssAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
