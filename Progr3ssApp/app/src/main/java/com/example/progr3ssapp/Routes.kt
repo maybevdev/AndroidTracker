@@ -6,6 +6,9 @@ import kotlinx.serialization.Serializable
 object Login
 
 @Serializable
+object Register
+
+@Serializable
 object MainGraph   // groups the screens that show the bottom bar
 
 @Serializable

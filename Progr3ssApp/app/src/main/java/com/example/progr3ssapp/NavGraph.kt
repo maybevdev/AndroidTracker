@@ -29,7 +29,7 @@ fun AppNavGraph() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    // Bottom bar only on screens inside MainGraph (so never on Login)
+    // Bottom bar only on screens inside MainGraph (so never on Login or Register)
     val showBottomBar = currentDestination?.hierarchy?.any {
         it.hasRoute(MainGraph::class)
     } == true
@@ -70,7 +70,22 @@ fun AppNavGraph() {
                         navController.navigate(MainGraph) {
                             popUpTo<Login> { inclusive = true } // Back won't return to Login
                         }
+                    },
+                    onNavigateToRegister = {
+                        navController.navigate(Register) { launchSingleTop = true }
                     }
+                )
+            }
+
+            composable<Register> {
+                RegisterScreen(
+                    onRegisterSuccess = {
+                        navController.navigate(MainGraph) {
+                            // Removes both Register and Login, so Back won't return to them
+                            popUpTo<Login> { inclusive = true }
+                        }
+                    },
+                    onNavigateToLogin = { navController.popBackStack() }
                 )
             }
 
