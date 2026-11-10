@@ -7,7 +7,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
@@ -15,15 +17,22 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
+import com.example.progr3ssapp.utils.SessionManager
 
 @Composable
 fun AppNavGraph() {
     val navController = rememberNavController()
 
+    // Auto-login: if a token is saved, skip Login and open the main screens
+    val context = LocalContext.current
+    val sessionManager = remember { SessionManager.getInstance(context) }
+    val startDestination: Any = remember {
+        if (sessionManager.isLoggedIn) MainGraph else Login
+    }
+
     val bottomNavItems = listOf(
         BottomNavItem(route = Home, label = "Home"),
-        BottomNavItem(route = Profile(), label = "Profile")
+        BottomNavItem(route = Profile, label = "Profile")
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -61,7 +70,7 @@ fun AppNavGraph() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Login,
+            startDestination = startDestination,
             modifier = Modifier.padding(innerPadding)
         ) {
             composable<Login> {
@@ -91,16 +100,19 @@ fun AppNavGraph() {
 
             navigation<MainGraph>(startDestination = Home) {
                 composable<Home> {
-                    HomeScreen(
-                        onNavigateToProfile = { userId, userName ->
-                            navController.navigate(Profile(userId, userName))
-                        }
-                    )
+                    HomeScreen()
                 }
 
-                composable<Profile> { backStackEntry ->
-                    val profile: Profile = backStackEntry.toRoute()
-                    ProfileScreen(profile.userId, profile.userName)
+                composable<Profile> {
+                    ProfileScreen(
+                        onLoggedOut = {
+                            navController.navigate(Login) {
+                                // Remove every logged-in screen so Back can't re-enter them
+                                popUpTo<MainGraph> { inclusive = true }
+                                launchSingleTop = true
+                            }
+                        }
+                    )
                 }
             }
         }

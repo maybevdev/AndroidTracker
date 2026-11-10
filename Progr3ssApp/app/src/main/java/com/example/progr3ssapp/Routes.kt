@@ -15,7 +15,4 @@ object MainGraph   // groups the screens that show the bottom bar
 object Home
 
 @Serializable
-data class Profile(
-    val userId: String = "guest",
-    val userName: String = "Guest"
-)
+object Profile     // shows the logged-in user, so no arguments needed

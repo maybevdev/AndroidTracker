@@ -20,7 +20,6 @@ class AuthRepository(
         response.requireBody("Login failed")
     }
 
-    // Used later for the Register screen
     suspend fun register(
         username: String,
         email: String,
@@ -44,6 +43,13 @@ class AuthRepository(
             profileImage = imagePart
         )
         response.requireBody("Registration failed")
+    }
+
+    // Tells the backend we logged out. If it fails (no internet, expired token),
+    // we ignore it: the app still logs out locally.
+    suspend fun logout(accessToken: String?) {
+        if (accessToken.isNullOrEmpty()) return
+        runCatching { api.logout("Bearer $accessToken") }
     }
 
     private fun Response<LoginResponse>.requireBody(fallback: String): LoginResponse {
